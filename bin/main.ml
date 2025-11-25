@@ -41,11 +41,36 @@ let start_cmd =
   in
   Cmd.v info Term.(const run $ goal)
 
+let vfs_test_cmd =
+  let doc = "Test VFS operations" in
+  let info = Cmd.info "vfs-test" ~doc in
+  let run () =
+    let vfs = Poly.Poly_vfs.empty in
+    let vfs = Poly.Poly_vfs.write_file vfs "test_vfs.txt" "Hello from VFS!" in
+    Poly.Poly_vfs.commit vfs;
+    match Poly.Poly_vfs.read_file vfs "test_vfs.txt" with
+    | Ok content -> print_endline ("Read back: " ^ content)
+    | Error e -> print_endline ("Error: " ^ e)
+  in
+  Cmd.v info Term.(const run $ const ())
+
+let ai_test_cmd =
+  let doc = "Test AI integration" in
+  let info = Cmd.info "ai-test" ~doc in
+  let run () =
+    Eio_main.run @@ fun _env ->
+    let prompt = Poly.Poly_ai.Prompt.create ~system:"You are a helpful assistant." ~user:"Hello, AI!" in
+    match Poly.Poly_ai.Client.chat prompt with
+    | Ok response -> print_endline ("AI Response: " ^ response)
+    | Error e -> print_endline ("Error: " ^ e)
+  in
+  Cmd.v info Term.(const run $ const ())
+
 let main_cmd =
   let doc = "A high-performance, structure-aware CLI coding agent" in
   let info = Cmd.info "poly" ~version:Poly.Poly_core.version ~doc in
   let default = Term.(const run $ setup_log) in
-  Cmd.group info ~default [parse_cmd; start_cmd]
+  Cmd.group info ~default [parse_cmd; start_cmd; vfs_test_cmd; ai_test_cmd]
 
 let () =
   exit (Cmd.eval main_cmd)
