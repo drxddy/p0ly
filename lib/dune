@@ -11,6 +11,12 @@
   eio
   eio_main
   compiler-libs.common
-  unix)
+  unix
+  notty
+  notty.unix
+  logs.cli
+  logs.fmt
+  fmt.cli
+  fmt.tty)
  (preprocess
   (pps ppx_deriving_yojson ppx_deriving.show)))

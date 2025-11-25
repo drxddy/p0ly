@@ -6,7 +6,14 @@ module Prompt = struct
     user : string;
   }
 
-  let create ~system ~user = { system; user }
+  let create ~system ~user =
+    let tools_desc = "
+Available Tools:
+- WRITE:path|content -> Write content to a file.
+- READ:path -> Read content from a file.
+- INDEX:path -> Index a file to find symbols.
+Reply ONLY with a tool command or a final answer." in
+    { system = system ^ tools_desc; user }
 
   let to_string p =
     Printf.sprintf "System: %s\nUser: %s" p.system p.user

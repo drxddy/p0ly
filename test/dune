@@ -5,3 +5,7 @@
 (executable
  (name test_parser)
  (libraries poly))
+
+(executable
+ (name test_vfs)
+ (libraries poly))
