@@ -86,16 +86,18 @@ let run env =
     Term.image term (render t);
     match Term.event term with
     | `Key (`Enter, _) ->
-        let goal = t.input_buffer in
-        let t_with_input = { t with history = { typ = User; content = goal } :: t.history; input_buffer = "" } in
-        Term.image term (render t_with_input); (* Render user input immediately *)
+        let goal = String.trim t.input_buffer in
+        if goal = "exit" || goal = "quit" then Term.release term
+        else
+          let t_with_input = { t with history = { typ = User; content = goal } :: t.history; input_buffer = "" } in
+          Term.image term (render t_with_input); (* Render user input immediately *)
+          
+          (* Run the brain loop *)
+          (* Note: This blocks the UI. Ideally we'd run this async. *)
+          let t_after_brain = run_brain_loop t_with_input goal in
+          loop t_after_brain
         
-        (* Run the brain loop *)
-        (* Note: This blocks the UI. Ideally we'd run this async. *)
-        let t_after_brain = run_brain_loop t_with_input goal in
-        loop t_after_brain
-        
-    | `Key (`ASCII 'c', [`Ctrl]) -> Term.release term
+    | `Key (`ASCII 'c', [`Ctrl]) -> Term.release term; exit 0
     | `Key (`ASCII c, _) ->
         loop { t with input_buffer = t.input_buffer ^ String.make 1 c }
     | `Key (`Backspace, _) ->
