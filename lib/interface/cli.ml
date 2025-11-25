@@ -28,6 +28,7 @@ let start_cmd =
   let info = Cmd.info "start" ~doc in
   let run () =
     Eio_main.run @@ fun env ->
+    (Mirage_crypto_rng_eio.run [@alert "-deprecated"]) (module Mirage_crypto_rng.Fortuna) env @@ fun () ->
     Repl.run env
   in
   Cmd.v info Term.(const run $ const ())
@@ -53,6 +54,7 @@ let ai_test_cmd =
   let info = Cmd.info "ai-test" ~doc in
   let run () =
     Eio_main.run @@ fun env ->
+    (Mirage_crypto_rng_eio.run [@alert "-deprecated"]) (module Mirage_crypto_rng.Fortuna) env @@ fun () ->
     let prompt = Poly_ai.Prompt.create ~system:"You are a helpful assistant." ~user:"Hello, AI!" in
     match Poly_ai.Client.chat env prompt with
     | Ok response -> print_endline ("AI Response: " ^ response)

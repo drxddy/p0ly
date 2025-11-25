@@ -33,4 +33,10 @@
   (compiler-libs.common
    (>= 5.0.0))
   (notty
-   (>= 0.2.3))))
+   (>= 0.2.3))
+  (tls-eio
+   (>= 0.17.0))
+  (ca-certs
+   (>= 0.2.3))
+  (mirage-crypto-rng-eio
+   (>= 0.11.0))))

@@ -18,6 +18,9 @@
   logs.cli
   logs.fmt
   fmt.cli
-  fmt.tty)
+  fmt.tty
+  tls-eio
+  ca-certs
+  mirage-crypto-rng-eio)
  (preprocess
   (pps ppx_deriving_yojson ppx_deriving.show)))
