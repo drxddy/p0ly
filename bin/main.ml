@@ -58,9 +58,9 @@ let ai_test_cmd =
   let doc = "Test AI integration" in
   let info = Cmd.info "ai-test" ~doc in
   let run () =
-    Eio_main.run @@ fun _env ->
+    Eio_main.run @@ fun env ->
     let prompt = Poly.Poly_ai.Prompt.create ~system:"You are a helpful assistant." ~user:"Hello, AI!" in
-    match Poly.Poly_ai.Client.chat prompt with
+    match Poly.Poly_ai.Client.chat env prompt with
     | Ok response -> print_endline ("AI Response: " ^ response)
     | Error e -> print_endline ("Error: " ^ e)
   in

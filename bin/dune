@@ -1,5 +1,13 @@
 (executable
  (public_name poly)
  (name main)
- (libraries poly cmdliner eio_main logs.cli logs.fmt fmt.cli fmt.tty)
-)
+ (libraries
+  poly
+  cmdliner
+  fmt
+  logs
+  eio_main
+  logs.cli
+  logs.fmt
+  fmt.cli
+  fmt.tty))

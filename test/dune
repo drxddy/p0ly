@@ -1,4 +1,7 @@
 (test
  (name test_poly)
- (libraries poly)
-)
+ (libraries poly))
+
+(executable
+ (name test_parser)
+ (libraries poly))

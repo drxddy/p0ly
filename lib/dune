@@ -3,6 +3,14 @@
 (library
  (name poly)
  (public_name poly)
- (libraries yojson ppx_deriving_yojson cmdliner cohttp-eio eio)
- (preprocess (pps ppx_deriving_yojson ppx_deriving.show))
-)
+ (libraries
+  yojson
+  ppx_deriving_yojson
+  cmdliner
+  cohttp-eio
+  eio
+  eio_main
+  compiler-libs.common
+  unix)
+ (preprocess
+  (pps ppx_deriving_yojson ppx_deriving.show)))
