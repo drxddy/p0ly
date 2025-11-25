@@ -12,6 +12,7 @@
   eio_main
   compiler-libs.common
   unix
+  uri
   notty
   notty.unix
   logs.cli

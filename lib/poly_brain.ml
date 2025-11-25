@@ -9,27 +9,26 @@ type state =
   [@@deriving show]
 
 let parse_tool_from_llm response =
-  (* Simple heuristic parsing for now *)
-  if String.starts_with ~prefix:"WRITE:" response then
-    let content = String.sub response 6 (String.length response - 6) |> String.trim in
-    match String.split_on_char '|' content with
-    | [path; data] -> Some (Poly_tools.Write (String.trim path, String.trim data))
+  try
+    let json = Yojson.Safe.from_string response in
+    let open Yojson.Safe.Util in
+    let tool = member "tool" json |> to_string in
+    let path = member "path" json |> to_string in
+    match tool with
+    | "write" ->
+        let content = member "content" json |> to_string in
+        Some (Poly_tools.Write (path, content))
+    | "read" -> Some (Poly_tools.Read path)
+    | "index" -> Some (Poly_tools.Index path)
     | _ -> None
-  else if String.starts_with ~prefix:"READ:" response then
-    let path = String.sub response 5 (String.length response - 5) |> String.trim in
-    Some (Poly_tools.Read path)
-  else if String.starts_with ~prefix:"INDEX:" response then
-    let path = String.sub response 6 (String.length response - 6) |> String.trim in
-    Some (Poly_tools.Index path)
-  else
-    None
+  with _ -> None
 
 let step env current_state =
   match current_state with
   | Thinking (goal, vfs) ->
       Logs.info (fun m -> m "Thinking about: %s" goal);
       let prompt = Poly_ai.Prompt.create
-        ~system:"You are a coding agent. Use tools: WRITE:path|content, READ:path, INDEX:path. Reply ONLY with a tool command."
+        ~system:"You are a coding agent. You must act autonomously to achieve the goal."
         ~user:("Goal: " ^ goal) in
       begin match Poly_ai.Client.chat env prompt with
       | Ok response ->
