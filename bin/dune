@@ -1,0 +1,5 @@
+(executable
+ (public_name poly)
+ (name main)
+ (libraries poly cmdliner eio_main logs.cli logs.fmt fmt.cli fmt.tty)
+)

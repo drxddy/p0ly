@@ -1,0 +1,33 @@
+# Dune build artifacts
+_build/
+*.install
+
+# OCaml compiled files
+*.cmi
+*.cmo
+*.cmx
+*.cmxa
+*.cmxs
+*.cma
+*.a
+*.o
+*.so
+*.dylib
+*.dll
+
+# Merlin
+.merlin
+
+# Editor and IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Generated files
+*.annot
+
+# Logs
+*.log
