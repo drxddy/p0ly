@@ -66,11 +66,27 @@ let ai_test_cmd =
   in
   Cmd.v info Term.(const run $ const ())
 
+let index_cmd =
+  let doc = "Index a file and print its symbol table" in
+  let info = Cmd.info "index" ~doc in
+  let file = Arg.(required & pos 0 (some string) None & info [] ~docv:"FILE" ~doc:"The file to index") in
+  let run file =
+    match Poly.Poly_index.index_file file with
+    | Ok table ->
+        Poly.Poly_index.SymbolTable.to_list table
+        |> List.map (fun sym -> Poly.Poly_index.Symbol.show sym)
+        |> String.concat "\n"
+        |> print_endline
+    | Error e ->
+        Logs.err (fun m -> m "Failed to index file: %s" e)
+  in
+  Cmd.v info Term.(const run $ file)
+
 let main_cmd =
   let doc = "A high-performance, structure-aware CLI coding agent" in
   let info = Cmd.info "poly" ~version:Poly.Poly_core.version ~doc in
   let default = Term.(const run $ setup_log) in
-  Cmd.group info ~default [parse_cmd; start_cmd; vfs_test_cmd; ai_test_cmd]
+  Cmd.group info ~default [parse_cmd; start_cmd; vfs_test_cmd; ai_test_cmd; index_cmd]
 
 let () =
   exit (Cmd.eval main_cmd)
