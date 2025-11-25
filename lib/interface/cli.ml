@@ -26,16 +26,11 @@ let parse_cmd =
 let start_cmd =
   let doc = "Start the agent loop" in
   let info = Cmd.info "start" ~doc in
-  let goal = Arg.(required & pos 0 (some string) None & info [] ~docv:"GOAL" ~doc:"The goal for the agent") in
-  let run goal =
-    let initial_state = Poly_brain.Thinking (goal, Poly_vfs.empty) in
-    let final_state = Poly_brain.loop (Eio_main.run @@ fun env -> env) initial_state in
-    match final_state with
-    | Done _ -> print_endline "Agent finished successfully."
-    | Failed _ -> print_endline "Agent failed."
-    | _ -> ()
+  let run () =
+    Eio_main.run @@ fun env ->
+    Repl.run env
   in
-  Cmd.v info Term.(const run $ goal)
+  Cmd.v info Term.(const run $ const ())
 
 let vfs_test_cmd =
   let doc = "Test VFS operations" in

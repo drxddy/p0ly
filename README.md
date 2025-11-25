@@ -1,4 +1,6 @@
-# Poly: The OCaml Structural Coding Agent
+# Poly: Structure-aware CLI Coding Agent
+
+![screenshot](screenshot.png)
 
 Poly is a high-performance, structure-aware CLI coding agent built in OCaml. Unlike traditional agents that treat code as text strings, Poly treats code as data (ASTs), allowing for more accurate analysis, safer edits, and "predictive coding" capabilities.
 
@@ -66,7 +68,7 @@ dune exec poly -- ai-test
     export GEMINI_API_KEY="your_api_key"
     ```
 
-## 📂 Project Structure
+## Project Structure
 
 - `bin/`: Entry point (`main.ml`).
 - `lib/`: Core logic.
